@@ -13,6 +13,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
+import javax.crypto.*;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
@@ -37,9 +39,11 @@ public class AfterLoginPage implements Initializable {
     @FXML
     private RadioButton showPassRadio;
     @FXML
+    private RadioButton toggleVisibleRadio;
+    @FXML
     private TextField passwordGenerateField;
     @FXML
-    private  TableView<PairOfUserAndPass> passwordsTable;
+    private TableView<PairOfUserAndPass> passwordsTable;
     @FXML
     private TableColumn<PairOfUserAndPass, String> userNameColumn;
     @FXML
@@ -69,14 +73,26 @@ public class AfterLoginPage implements Initializable {
 
 
     private void saveData(){
-        String file = "user" + user.getUserName() + ".txt";
+        String file = "user" + user.getUserName();
         try {
-            FileOutputStream fout = new FileOutputStream(file);
-            ObjectOutputStream obj = new ObjectOutputStream(fout);
-            obj.writeObject(listOfPasses);
-            obj.close();
-            fout.close();
-        } catch (IOException e) {
+            SecretKey key64 = new SecretKeySpec(new byte[]{0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07}, "Blowfish");
+            Cipher cipher = Cipher.getInstance("Blowfish");
+            cipher.init(Cipher.ENCRYPT_MODE, key64);
+            SealedObject sealedObject = new SealedObject(listOfPasses, cipher);
+            CipherOutputStream cipherOutputStream = new CipherOutputStream(new BufferedOutputStream(new FileOutputStream(file)), cipher);
+            ObjectOutputStream outputStream = new ObjectOutputStream(cipherOutputStream);
+            outputStream.writeObject(sealedObject);
+            outputStream.close();
+
+
+
+
+//            FileOutputStream fout = new FileOutputStream(file);
+//            ObjectOutputStream obj = new ObjectOutputStream(fout);
+//            obj.writeObject(listOfPasses);
+//            obj.close();
+//            fout.close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -84,16 +100,25 @@ public class AfterLoginPage implements Initializable {
 
     public void loadData(PairOfUserAndPass user){
         AfterLoginPage.user = user;
-        File f = new File("user" + user.getUserName() + ".txt");
+        File f = new File("user" + user.getUserName());
         if (f.exists()) {
-            String file = "user" + user.getUserName() + ".txt";
             try {
-                FileInputStream fin = new FileInputStream(file);
-                ObjectInputStream obj = new ObjectInputStream(fin);
-                listOfPasses = (ArrayList<PairOfUserAndPass>) obj.readObject();
-                obj.close();
-                fin.close();
-            } catch (IOException | ClassNotFoundException e) {
+                SecretKey key64 = new SecretKeySpec(new byte[]{0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07}, "Blowfish");
+                Cipher cipher = Cipher.getInstance("Blowfish");
+                cipher.init(Cipher.DECRYPT_MODE, key64);
+                CipherInputStream cipherInputStream = new CipherInputStream(new BufferedInputStream(new FileInputStream(f)), cipher);
+                ObjectInputStream inputStream = new ObjectInputStream(cipherInputStream);
+                SealedObject sealedObject = (SealedObject) inputStream.readObject();
+                listOfPasses = (ArrayList<PairOfUserAndPass>) sealedObject.getObject(cipher);
+
+
+
+//                FileInputStream fin = new FileInputStream(file);
+//                ObjectInputStream obj = new ObjectInputStream(fin);
+//                listOfPasses = (ArrayList<PairOfUserAndPass>) obj.readObject();
+//                obj.close();
+//                fin.close();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -253,5 +278,9 @@ public class AfterLoginPage implements Initializable {
         PairOfUserAndPass selectedItem = passwordsTable.getSelectionModel().getSelectedItem();
         passwordsTable.getItems().remove(selectedItem);
         listOfPasses.remove(selectedItem);
+    }
+    public void toggleVisible(){
+        passwordsTable.setVisible(!toggleVisibleRadio.isSelected());
+
     }
 }

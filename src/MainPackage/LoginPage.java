@@ -8,22 +8,20 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
+import javax.crypto.*;
+import javax.crypto.spec.SecretKeySpec;
+
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.*;
 
 public class LoginPage implements Initializable {
 
-    /*
-    todo: add validation, loading data, saving data, load to the after login page only userdata, delete older data.
-     */
 
     private Stage stage;
     private Scene scene;
@@ -35,6 +33,9 @@ public class LoginPage implements Initializable {
 
     @FXML
     PasswordField passwordTextField;
+
+    @FXML
+    private Label notMatchPasswords;
 
     public void goToCreateAccountPage(ActionEvent event) throws IOException {
         try {
@@ -72,23 +73,44 @@ public class LoginPage implements Initializable {
     // todo, this.
     private boolean validateUser() {
         PairOfUserAndPass user = new PairOfUserAndPass(passwordTextField.getText(),userNameTextField.getText());
+        notMatchPasswords.setVisible(true);
         return passwords.containsValue(user);
     }
 
     // todo, load users data to the hash map
     private void loadUsersData() {
-        File f = new File("users.txt");
+        File f = new File("users");
         if (f.exists()) {
-            String file = "users.txt";
+
             try {
-                FileInputStream fin = new FileInputStream(file);
-                ObjectInputStream obj = new ObjectInputStream(fin);
-                passwords = (HashMap<String, PairOfUserAndPass>) obj.readObject();
-                obj.close();
-                fin.close();
-            } catch (IOException | ClassNotFoundException e) {
+                SecretKey key64 = new SecretKeySpec(new byte[]{0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07}, "Blowfish");
+                Cipher cipher = Cipher.getInstance("Blowfish");
+
+                cipher.init(Cipher.DECRYPT_MODE, key64);
+                CipherInputStream cipherInputStream = new CipherInputStream(new BufferedInputStream(new FileInputStream(f)), cipher);
+                ObjectInputStream inputStream = new ObjectInputStream(cipherInputStream);
+                SealedObject sealedObject = (SealedObject) inputStream.readObject();
+                passwords = (HashMap<String, PairOfUserAndPass>) sealedObject.getObject(cipher);
+            }
+            catch (Exception e){
                 e.printStackTrace();
             }
+
+
+
+
+
+
+//            String file = "users.txt";
+//            try {
+//                FileInputStream fin = new FileInputStream(file);
+//                ObjectInputStream obj = new ObjectInputStream(fin);
+//                passwords = (HashMap<String, PairOfUserAndPass>) obj.readObject();
+//                obj.close();
+//                fin.close();
+//            } catch (IOException | ClassNotFoundException e) {
+//                e.printStackTrace();
+//            }
         }
     }
 

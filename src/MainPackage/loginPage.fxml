@@ -14,7 +14,7 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Button fx:id="loginButton" layoutX="320.0" layoutY="197.0" mnemonicParsing="false" onAction="#goToAfterLoginPage" prefHeight="25.0" prefWidth="94.0" text="Login" />
+      <Button fx:id="loginButton" layoutX="320.0" layoutY="224.0" mnemonicParsing="false" onAction="#goToAfterLoginPage" prefHeight="25.0" prefWidth="94.0" text="Login" />
       <TextField fx:id="userNameTextField" layoutX="287.0" layoutY="130.0" prefHeight="25.0" prefWidth="160.0" promptText="User Name" />
       <Label layoutX="198.0" layoutY="80.0" text="Enter your user name and password below" textAlignment="CENTER">
          <font>
@@ -23,5 +23,6 @@
       </Label>
       <PasswordField fx:id="passwordTextField" layoutX="287.0" layoutY="162.0" prefHeight="25.0" prefWidth="160.0" promptText="Password" />
       <Button fx:id="createUserButton" layoutX="320.0" layoutY="290.0" mnemonicParsing="false" onAction="#goToCreateAccountPage" prefHeight="27.0" prefWidth="94.0" text="Create User" textAlignment="RIGHT" />
+      <Label fx:id="notMatchPasswords" alignment="CENTER" contentDisplay="CENTER" layoutX="302.0" layoutY="187.0" text="Passwords do not Match" textFill="RED" visible="false" />
    </children>
 </AnchorPane>
