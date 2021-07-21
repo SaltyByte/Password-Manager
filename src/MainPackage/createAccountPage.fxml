@@ -14,11 +14,11 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Button layoutX="274.0" layoutY="308.0" mnemonicParsing="false" onAction="#goBackToLoginPage" prefHeight="27.0" prefWidth="149.0" text="Go Back To Login Page" />
-      <Button fx:id="createAccountButton" layoutX="317.0" layoutY="220.0" mnemonicParsing="false" onAction="#createNewUser" prefHeight="25.0" prefWidth="64.0" text="Create" />
-      <PasswordField fx:id="createPasswordTextField2" layoutX="274.0" layoutY="162.0" promptText="Repeat Password" />
       <TextField fx:id="createUserNameTextField" layoutX="274.0" layoutY="80.0" promptText="User Name" />
       <PasswordField fx:id="createPasswordTextField1" layoutX="274.0" layoutY="121.0" promptText="Password" />
+      <PasswordField fx:id="createPasswordTextField2" layoutX="274.0" layoutY="162.0" promptText="Repeat Password" />
       <Label fx:id="passwordsMatchLabel" alignment="CENTER" layoutX="283.0" layoutY="187.0" text="Passwords do not Match" textAlignment="CENTER" textFill="RED" visible="false" />
+      <Button fx:id="createAccountButton" defaultButton="true" layoutX="317.0" layoutY="220.0" mnemonicParsing="false" onAction="#createNewUser" prefHeight="25.0" prefWidth="64.0" text="Create" />
+      <Button layoutX="274.0" layoutY="301.0" mnemonicParsing="false" onAction="#goBackToLoginPage" prefHeight="27.0" prefWidth="149.0" text="Go Back To Login Page" />
    </children>
 </AnchorPane>

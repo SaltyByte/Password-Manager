@@ -17,7 +17,6 @@ public class Main extends Application {
             Parent root = loader.load();
             LoginPage controller = loader.getController();
             Scene scene = new Scene(root);
-
             primaryStage.setResizable(false);
             primaryStage.setScene(scene);
             primaryStage.setTitle("Password Manager");

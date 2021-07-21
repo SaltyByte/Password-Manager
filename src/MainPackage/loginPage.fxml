@@ -14,7 +14,7 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Button fx:id="loginButton" layoutX="320.0" layoutY="224.0" mnemonicParsing="false" onAction="#goToAfterLoginPage" prefHeight="25.0" prefWidth="94.0" text="Login" />
+      <Button fx:id="loginButton" defaultButton="true" layoutX="320.0" layoutY="224.0" mnemonicParsing="false" onAction="#goToAfterLoginPage" prefHeight="25.0" prefWidth="94.0" text="Login" />
       <TextField fx:id="userNameTextField" layoutX="287.0" layoutY="130.0" prefHeight="25.0" prefWidth="160.0" promptText="User Name" />
       <Label layoutX="198.0" layoutY="80.0" text="Enter your user name and password below" textAlignment="CENTER">
          <font>

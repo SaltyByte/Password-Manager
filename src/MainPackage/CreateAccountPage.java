@@ -53,7 +53,7 @@ public class CreateAccountPage implements Serializable, Initializable {
         } else if (!userName.isEmpty() && !password1.isEmpty()) {
             passwords.put(userName, user);
             passwordsMatchLabel.setStyle("-fx-text-fill: green;");
-            passwordsMatchLabel.setText("Successes! Made New User");
+            passwordsMatchLabel.setText("Success! Made New User");
             passwordsMatchLabel.setVisible(true);
             save();
         }
