@@ -11,4 +11,6 @@ The second widow has few functions:
 1. A field to check if any password is strong enough.
 2. Generating random password with digits, symbols, lower and upper case letters with the size between 14 to 16.
 3. A table to store the passwords you wish to use later.
+4. Radio button to hide the table if necessary.
+5. Delete a row if selected
 
